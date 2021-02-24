@@ -554,7 +554,8 @@ html[data-theme=dark] {
     font-size: 20px;
     line-height: 100%;
     letter-spacing: -.03em;
-    padding: 0 0 0 27px
+    padding: 0 0 0 27px;
+    color: #eeeeee
 }
 
 .blog-item__sub-tittle {

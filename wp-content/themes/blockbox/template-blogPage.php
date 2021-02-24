@@ -14,18 +14,40 @@ get_header();
             <div class="row justify-content-center">
 
 <?php
-$posts = get_posts();
+$params = array(
+    'posts_per_page' => 1000000 // этот параметр не обязателен, так как get_posts() по умолчанию и так выводит 5 постов
+);
+
+$posts = get_posts($params);
+
+
 
 foreach( $posts as $post ){
-    setup_postdata($post);?>
+    setup_postdata($post);
+    ?>
+    <?php
+        $textContent = get_the_content();
+        $substrText = mb_substr($textContent, 0, 50);
+        $textExcerpt = get_the_excerpt();
 
+        if(strlen($textExcerpt) >= 70) {
+            $text = $substrText;
+        } else {
+            $text = $textExcerpt;
+        }
+    ?>
     <div class="col-12 col-sm-12 col-md-6 col-xl-4 p-0 box ">
         <div class="blog-item">
-            <img src="<?php echo get_the_post_thumbnail_url(get_the_ID(), 'full'); ?>" alt="" class="blog-item__people">
+            <img src="<?php if(get_the_post_thumbnail_url(get_the_ID(), 'full'))
+            {
+                echo get_the_post_thumbnail_url(get_the_ID(), 'full');
+            } else {
+                echo get_template_directory_uri() ."/assets/images/default.png";
+            } ?>" alt="" class="blog-item__people">
             <div class="blog-item__card">
                 <img src="<?php  echo get_template_directory_uri()?>/assets/images/blogimg1.svg" alt="" class="blog-item__img">
                 <h3 class="blog-item__tittle"><?php the_title();?></h3>
-                <p class="blog-item__sub-tittle"><?php echo get_the_excerpt(); ?></p>
+                <p class="blog-item__sub-tittle"><?php echo $text ?></p>
                 <a href="<?php the_permalink(); ?>" class="blog-item__link">Learn more &rarr;</a>
             </div>
         </div>
@@ -34,7 +56,7 @@ foreach( $posts as $post ){
     <?php
 }
 
-wp_reset_postdata(); // сброс
+//wp_reset_postdata(); // сброс
 ?>
 
 
